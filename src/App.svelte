@@ -2,8 +2,11 @@
   import { onMount } from 'svelte'
   import { pluginStore } from './stores/pluginStore'
 
+  let connectionTested = $state(false)
+
   function handleTestConnection() {
     console.log('Test Connection button clicked')
+    connectionTested = true
     $pluginStore.service.sendMessage({
       type: 'test',
       data: { message: 'Hello from Svelte GUI!' }
@@ -18,8 +21,8 @@
 
 <main class="container">
   <h1>WOGD JUCE Plugin - Svelte GUI</h1>
-  <div class="status {$pluginStore.isConnected ? 'connected' : 'disconnected'}">
-    Status: {$pluginStore.isConnected ? 'Connected to Plugin' : 'Running in Dev Mode'}
+  <div class="status {connectionTested && $pluginStore.isConnected ? 'connected' : 'disconnected'}">
+    Status: {connectionTested && $pluginStore.isConnected ? 'Connected to Plugin' : 'Not Connected'}
   </div>
   <button on:click={handleTestConnection}>
     TEST CONNECTION
